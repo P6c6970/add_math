@@ -1,14 +1,14 @@
 # fraction
 The use of common fractions
 
-- - - - - конструкторы
-fraction()
-fraction(int)
-fraction(double)
-fraction(int, int)
-fraction(double, double)
-fraction(int, double)
-fraction(double, int)
+конструкторы:
+-fraction()
+-fraction(int)
+-fraction(double)
+-fraction(int, int)
+-fraction(double, double)
+-fraction(int, double)
+-fraction(double, int)
 - - - - - ввод данных
 void set()
 void set(int)
