@@ -6,6 +6,6 @@ The use of common fractions
 
 ввод данных: set:(), (int), (int, int), (double), (double, double), (int, double), (double, int)
 
-получение данных (результат string): get(), get_double(), get_int()
+получение данных: (string)get(), (double)get_double(), (int)get_int()
 
 операторы: +, +=, -, -=, *, *=, /, /=, >, >=, <, <=, ==, !=, =
