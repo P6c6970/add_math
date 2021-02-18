@@ -1,8 +1,8 @@
 # fraction
 The use of common fractions
 
-// - - - - - конструкторы
-fraction()
+// - - - - - конструкторы\n
+fraction()\n
 fraction(int)
 fraction(double)
 fraction(int, int)
