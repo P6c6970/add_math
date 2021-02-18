@@ -1,31 +1,288 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1231
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fraction", "fraction\fraction.vcxproj", "{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Debug|x64.ActiveCfg = Debug|x64
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Debug|x64.Build.0 = Debug|x64
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Debug|x86.ActiveCfg = Debug|Win32
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Debug|x86.Build.0 = Debug|Win32
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Release|x64.ActiveCfg = Release|x64
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Release|x64.Build.0 = Release|x64
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Release|x86.ActiveCfg = Release|Win32
-		{C62C64BD-B61E-4D66-A62F-9DE76C2483D2}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {00B5B305-FF57-47A2-B7BE-ECC123284387}
-	EndGlobalSection
-EndGlobal
+#include <string>
+
+using namespace std;
+
+class fraction {
+private:
+	// - - - - -
+	int numerator;
+	int denominator;
+	// - - - - -
+	int NOD(int a, int b) {
+		int c = 1;
+		int max = (a < b) ? a : b;
+		for (int i = 2; i <= max ; i++)
+		{
+			if ((a%i == 0) && (b%i == 0)) {
+				a /= i;
+				b /= i;
+				c *= i;
+			}
+		}
+		return c;
+	}
+	// - - - - -
+	void cut_back() {
+		int c = NOD(numerator, denominator);
+		numerator /= c;
+		denominator /= c;
+		if (denominator < 0) {
+			numerator *= -1;
+			denominator *= -1;
+		}
+	}
+	// - - - - -
+public:
+	// - - - - -
+	fraction() { this->set(); };
+	fraction(int a) { this->set(a); };
+	fraction(double a) { this->set(a); };
+	fraction(int a, int b) { this->set(a, b); };
+	fraction(double a, double b) { this->set(a, b); };
+	fraction(int a, double b) { this->set(a, b); };
+	fraction(double a, int b) { this->set(a, b); };
+	// - - - - -
+	void set() {
+		numerator = 1;
+		denominator = 1;
+	}
+	void set(int a) {
+		numerator = a;
+		denominator = 1;
+	}
+	void set(int a, int b) {
+		numerator = a;
+		denominator = b;
+		cut_back();
+	}
+	void set(double a) {
+		int b = 1;
+		for (int i = 0; (int)a != a; i++)
+		{
+			a *= 10;
+			b *= 10;
+		}
+		numerator = (int)a;
+		denominator = b;
+		cut_back();
+	}
+	void set(double a, double b) {
+		for (int i = 0; ((int)a != a || (int)b != b); i++)
+		{
+			a *= 10;
+			b *= 10;
+		}
+		numerator = (int)a;
+		denominator = (int)b;
+		cut_back();
+	}
+	void set(int a, double b) {
+		for (int i = 0; ((int)a != a || (int)b != b); i++)
+		{
+			a *= 10;
+			b *= 10;
+		}
+		numerator = a;
+		denominator = (int)b;
+		cut_back();
+	}
+	void set(double a, int b) {
+		for (int i = 0; ((int)a != a || (int)b != b); i++)
+		{
+			a *= 10;
+			b *= 10;
+		}
+		numerator = (int)a;
+		denominator = b;
+		cut_back();
+	}
+	// - - - - -
+	string get() {
+		if (denominator == 1) return to_string(numerator);
+		else if (denominator == 0) return "Error: the denominator 0";
+		else if (numerator == 0) return "0";
+		else return to_string(numerator) + '/' + to_string(denominator);
+	}
+	string get_double() {
+		if (denominator == 1) return to_string((double)numerator);
+		else if (denominator == 0) return "Error: the denominator 0";
+		else if (numerator == 0) return to_string((double)0);
+		else return to_string((double)numerator / denominator);
+	}
+	string get_int() {
+		if (denominator == 1) return to_string(numerator);
+		else if (denominator == 0) return "Error: the denominator 0";
+		else if (numerator == 0) return "0";
+		else return to_string(numerator/denominator);
+	}
+	// - - - - -
+	fraction operator + (fraction a) {
+		fraction b;
+		b.set(numerator*a.denominator+a.numerator*denominator, denominator*a.denominator);
+		return b;
+	}
+	fraction operator + (int a) {
+		fraction b;
+		b.set(numerator + a * denominator, denominator);
+		return b;
+	}
+	fraction operator + (double a) {
+		fraction b;
+		b.set(a);
+		b.set(numerator*b.denominator + b.numerator*denominator, denominator*b.denominator);
+		return b;
+	}
+	fraction operator += (fraction a) {
+		set(numerator*a.denominator + a.numerator*denominator, denominator*a.denominator);
+		return *this;
+	}
+	fraction operator += (int a) {
+		this->set(numerator + a*denominator, denominator);
+		return *this;
+	}
+	fraction operator += (double a) {
+		fraction b;
+		b.set(a);
+		this->set(numerator*b.denominator + b.numerator*denominator, denominator*b.denominator);
+		return *this;
+	}
+	// - - - - -
+	fraction operator - (fraction a) {
+		fraction b;
+		b.set(numerator*a.denominator - a.numerator*denominator, denominator*a.denominator);
+		return b;
+	}
+	fraction operator - (int a) {
+		fraction b;
+		b.set(numerator - a * denominator, denominator);
+		return b;
+	}
+	fraction operator - (double a) {
+		fraction b;
+		b.set(a);
+		b.set(numerator*b.denominator - b.numerator*denominator, denominator*b.denominator);
+		return b;
+	}
+	fraction operator -= (fraction a) {
+		this->set(numerator*a.denominator - a.numerator*denominator, denominator*a.denominator);
+		return *this;
+	}
+	fraction operator -= (int a) {
+		this->set(numerator - a * denominator, denominator);
+		return *this;
+	}
+	fraction operator -= (double a) {
+		fraction b;
+		b.set(a);
+		this->set(numerator*b.denominator - b.numerator*denominator, denominator*b.denominator);
+		return *this;
+	}
+	// - - - - -
+	fraction operator * (fraction a) {
+		fraction b;
+		b.set(numerator*a.numerator, denominator*a.denominator);
+		return b;
+	}
+	fraction operator *= (fraction a) {
+		this->set(numerator*a.numerator, denominator*a.denominator);
+		return *this;
+	}
+	// - - - - -
+	fraction operator / (fraction a) {
+		fraction b;
+		b.set(numerator*a.denominator, denominator*a.numerator);
+		return b;
+	}
+	fraction operator /= (fraction a) {
+		this->set(numerator*a.denominator, denominator*a.numerator);
+		return *this;
+	}
+	// - - - - -
+	bool operator > (fraction a) {
+		if (numerator*a.denominator > a.numerator*denominator) return true;
+		return false;
+	}
+	bool operator < (fraction a) {
+		if (numerator*a.denominator < a.numerator*denominator) return true;
+		return false;
+	}
+	bool operator >= (fraction a) {
+		if (numerator*a.denominator >= a.numerator*denominator) return true;
+		return false;
+	}
+	bool operator <= (fraction a) {
+		if (numerator*a.denominator <= a.numerator*denominator) return true;
+		return false;
+	}
+	bool operator == (fraction a) {
+		if (numerator*a.denominator == a.numerator*denominator) return true;
+		return false;
+	}
+	bool operator != (fraction a) {
+		if (numerator*a.denominator != a.numerator*denominator) return true;
+		return false;
+	}
+
+	bool operator > (double a) {
+		if ((double)numerator / denominator > a) return true;
+		return false;
+	}
+	bool operator < (double a) {
+		if ((double)numerator / denominator < a) return true;
+		return false;
+	}
+	bool operator >= (double a) {
+		if ((double)numerator / denominator >= a) return true;
+		return false;
+	}
+	bool operator <= (double a) {
+		if ((double)numerator / denominator <= a) return true;
+		return false;
+	}
+	bool operator == (double a) {
+		if ((double)numerator / denominator == a) return true;
+		return false;
+	}
+	bool operator != (double a) {
+		if ((double)numerator / denominator != a) return true;
+		return false;
+	}
+
+	bool operator > (int a) {
+		if ((double)numerator / denominator > a) return true;
+		return false;
+	}
+	bool operator < (int a) {
+		if ((double)numerator / denominator < a) return true;
+		return false;
+	}
+	bool operator >= (int a) {
+		if ((double)numerator / denominator >= a) return true;
+		return false;
+	}
+	bool operator <= (int a) {
+		if ((double)numerator / denominator <= a) return true;
+		return false;
+	}
+	bool operator == (int a) {
+		if ((double)numerator / denominator == a) return true;
+		return false;
+	}
+	bool operator != (int a) {
+		if ((double)numerator / denominator != a) return true;
+		return false;
+	}
+	// - - - - -
+	fraction operator = (fraction a) {
+		this->set(a.denominator, a.numerator);
+		return *this;
+	}
+	fraction operator = (double a) {
+		this->set(a);
+		return *this;
+	}
+	fraction operator = (int a) {
+		this->set(a);
+		return *this;
+	}
+};
