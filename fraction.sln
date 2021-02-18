@@ -11,7 +11,7 @@ private:
 	int NOD(int a, int b) {
 		int c = 1;
 		int max = (a < b) ? a : b;
-		for (int i = 2; i <= max ; i++)
+		for (int i = 2; i <= max; i++)
 		{
 			if ((a%i == 0) && (b%i == 0)) {
 				a /= i;
@@ -99,26 +99,26 @@ public:
 	// - - - - -
 	string get() {
 		if (denominator == 1) return to_string(numerator);
-		else if (denominator == 0) return "Error: the denominator 0";
+		else if (denominator == 0) return to_string(INFINITY);
 		else if (numerator == 0) return "0";
 		else return to_string(numerator) + '/' + to_string(denominator);
 	}
-	string get_double() {
-		if (denominator == 1) return to_string((double)numerator);
-		else if (denominator == 0) return "Error: the denominator 0";
-		else if (numerator == 0) return to_string((double)0);
-		else return to_string((double)numerator / denominator);
+	double get_double() {
+		if (denominator == 1) return (double)numerator;
+		else if (denominator == 0) return INFINITY;
+		else if (numerator == 0) return (double)0;
+		else return (double)numerator / denominator;
 	}
-	string get_int() {
-		if (denominator == 1) return to_string(numerator);
-		else if (denominator == 0) return "Error: the denominator 0";
-		else if (numerator == 0) return "0";
-		else return to_string(numerator/denominator);
+	int get_int() {
+		if (denominator == 1) return numerator;
+		else if (denominator == 0) return INFINITY;
+		else if (numerator == 0) return 0;
+		else return numerator / denominator;
 	}
 	// - - - - -
 	fraction operator + (fraction a) {
 		fraction b;
-		b.set(numerator*a.denominator+a.numerator*denominator, denominator*a.denominator);
+		b.set(numerator*a.denominator + a.numerator*denominator, denominator*a.denominator);
 		return b;
 	}
 	fraction operator + (int a) {
@@ -137,7 +137,7 @@ public:
 		return *this;
 	}
 	fraction operator += (int a) {
-		this->set(numerator + a*denominator, denominator);
+		this->set(numerator + a * denominator, denominator);
 		return *this;
 	}
 	fraction operator += (double a) {
