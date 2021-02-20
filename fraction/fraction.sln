@@ -17,6 +17,7 @@ private:
 				a /= i;
 				b /= i;
 				c *= i;
+				i--;
 			}
 		}
 		return c;
