@@ -7,15 +7,20 @@ private:
 	std::string convert() {
 		std::string c = "";
 		int a = number;
-		for (int i = 0; a > 0; i++)
-		{
-			if ((a % footing) < 10) {
-				c = std::to_string(a % footing) + c;
+		if (a > 0) {
+			for (short i = 0; a > 0; i++)
+			{
+				if ((a % footing) < 10) {
+					c = std::to_string(a % footing) + c;
+				}
+				else {
+					c = (char)((a % footing) + 87) + c;
+				}
+				a /= footing;
 			}
-			else {
-				c = (char)((a % footing) + 87) + c;
-			}
-			a /= footing;
+		}
+		else {
+			c = '0';
 		}
 		return c;
 	}
@@ -37,7 +42,7 @@ private:
 	}
 public:
 	bool set(int a, int b) {
-		if (a > 0 && b > 0 && b < 37) {
+		if (a >= 0 && b > 0 && b < 37) {
 			number = a;
 			footing = b;
 			return true;
