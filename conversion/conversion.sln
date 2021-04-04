@@ -7,20 +7,21 @@ private:
 	std::string convert() {
 		std::string c = "";
 		int a = number;
-		if (a > 0) {
-			for (short i = 0; a > 0; i++)
-			{
-				if ((a % footing) < 10) {
-					c = std::to_string(a % footing) + c;
-				}
-				else {
-					c = (char)((a % footing) + 87) + c;
-				}
-				a /= footing;
-			}
+		if (a < 0) {
+			a = a * -1;
 		}
-		else {
-			c = '0';
+		for (short i = 0; a > 0; i++)
+		{
+			if ((a % footing) < 10) {
+				c = std::to_string(a % footing) + c;
+			}
+			else {
+				c = (char)((a % footing) + 87) + c;
+			}
+			a /= footing;
+		}
+		if (number < 0) {
+			c = '-' + c;
 		}
 		return c;
 	}
@@ -33,8 +34,11 @@ private:
 			if (((int)a[i] - 48) > 9) {
 				c += ((int)a[i] - 87)*p;
 			}
-			else {
+			else if (((int)a[i] - 48) > 0) {
 				c += ((int)a[i] - 48)*p;
+			}
+			else if ((int)a[i] == 45) {
+				c *= -1;
 			}
 			p *= b;
 		}
@@ -42,7 +46,7 @@ private:
 	}
 public:
 	bool set(int a, int b) {
-		if (a >= 0 && b > 0 && b < 37) {
+		if (b > 1 && b < 37) {
 			number = a;
 			footing = b;
 			return true;
@@ -60,12 +64,12 @@ public:
 	std::string get() {
 		return convert();
 	}
-	
+
 	// - - - - -
 	conversion operator + (conversion a) {
 		conversion b;
 		bool c = b.set(a.number + this->number, this->footing);
-		if (!c){
+		if (!c) {
 			b.set(0, this->footing);
 		}
 		return b;
