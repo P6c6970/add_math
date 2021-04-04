@@ -9,18 +9,12 @@ private:
 	int denominator;
 	// - - - - -
 	int NOD(int a, int b) {
-		int c = 1;
-		int max = (a < b) ? a : b;
-		for (int i = 2; i <= max; i++)
-		{
-			if ((a%i == 0) && (b%i == 0)) {
-				a /= i;
-				b /= i;
-				c *= i;
-				i--;
-			}
-		}
-		return c;
+		while (b > 0) {
+        		int c = a % b;
+        		a = b;
+        		b = c;
+    		}
+   		return a;
 	}
 	// - - - - -
 	void cut_back() {
